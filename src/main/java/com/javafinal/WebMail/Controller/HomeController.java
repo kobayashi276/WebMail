@@ -36,7 +36,7 @@ public class HomeController {
         return "/email/list";
     }
 
-    @GetMapping("/register")
+    @GetMapping("register")
     public String register(){
         return "/LoginAndRegister/Register";
     }
@@ -44,7 +44,7 @@ public class HomeController {
 //    @PostMapping( value = "", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 // khi co json thi moi lam cai nay
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public String AddAccount(RegisterRequest rr, Model model){
         String errorMsg = InputValidate.validateRegisterInput(rr);
         if(errorMsg != null)
