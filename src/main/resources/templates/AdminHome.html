@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
+    />
+    <!-- <link rel="stylesheet" href="taskManager.css" />
+    <link rel="stylesheet" href="style.css" /> -->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;1,400;1,500&display=swap");
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+      
+      :root {
+        --primary-color: #3c27cb;
+      }
+      
+      body {
+        font-family: "Poppins" sans-serif;
+      }
+      
+      .modal__open {
+        padding: 20px 40px;
+        background: transparent;
+        color: black !important;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 999px;
+        background-color: white;
+        display: flex;
+        gap: 10px;
+        justify-content: start;
+        cursor: pointer;
+      }
+      
+      .modal__open span {
+        font-size: 20px;
+      }
+      
+      .modal__open button {
+        border: none;
+        background: transparent;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      
+      .modal {
+        position: fixed;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        width: 100%;
+        height: 100%;
+        z-index: 9999px;
+      }
+      
+      .modal__inner {
+        width: 600px;
+        height : 400px;
+        background: white;
+        position: relative;
+        top: 50%;
+        left:25%;
+        margin: 0 auto;
+        border-radius: 5px;
+        font-size: 20px;
+        overflow: hidden;
+        animation: modalShow 0.2s linear;
+      }
+      
+      .modal__inner--header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+        text-transform: capitalize;
+        background-color: var(--primary-color);
+      }
+      
+      .modal__inner--header i {
+        cursor: pointer;
+      }
+      
+      .modal__inner--body {
+        padding: 10px 20px 0 20px;
+      }
+      
+      .modal__inner--body h2 {
+        color: var(--primary-color);
+        margin-bottom: 12px;
+      }
+      
+      .modal__inner--body p {
+        text-transform: capitalize;
+      }
+      
+      .modal__inner--footer {
+        text-align: right;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      .modal__inner--footer button {
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        background-color: var(--primary-color);
+        padding: 10px 20px;
+        color: white;
+        cursor: pointer;
+      }
+      
+      .hide {
+        display: none;
+      }
+      
+      @keyframes modalShow {
+        from {
+          top: -500px;
+          opacity: 0;
+        }
+      
+        to {
+          top: 50%;
+          opacity: 1;
+        }
+      }
+
+:root {
+  --main-color: #fff;
+  --clor-dark: #1d2231;
+  --text-grey: #8390a2;
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style-type: none;
+  font-family: "Popins", sans-serif;
+  font-size: 14px;
+  user-select: none;
+}
+
+.sidebar {
+  width: 300px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #170f23;
+  z-index: 100;
+  transition: left 500ms;
+}
+
+.sidebar-brand span {
+  display: inline-block;
+  padding: 1rem;
+}
+
+.sidebar-menu {
+  margin-top: 1rem;
+}
+
+.sidebar-menu li {
+  width: 100%;
+  margin-bottom: 1.1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.a {
+  margin-top: 50px;
+}
+
+.b {
+  margin-top: 50px;
+}
+
+.sidebar-menu a {
+  padding-left: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sidebar-menu a.active {
+  background: rgba(255, 255, 255, 0.1);
+  ;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: var(--main-color);
+  border-radius: 30px;
+}
+
+.sidebar-menu a span:first-child {
+  font-size: 1.5rem;
+  padding-right: 1rem;
+}
+
+.main-content {
+  transition: margin-left 500ms;
+  margin-left: 300px;
+}
+
+header {
+  background: #352e3f;
+  height: 90px;
+  padding: 0px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.avatar{
+  width : 40px;
+  height : 40px;
+
+}
+.avatar > img {
+  width : 100%;
+  height : 100% ;
+  object-fit: cover;
+  border-radius: 999px;
+  cursor : pointer;
+}
+
+
+
+.reci {
+  border: none;
+  outline: none;
+  padding: 8px 16px;
+  padding-left: 10px;
+  font-size: 16px;
+}
+
+.subject {
+  border: none;
+  outline: none;
+  padding: 8px 16px;
+  padding-left: 10px;
+  font-size: 16px;
+}
+
+.c {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.c>span {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.contentEmail {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: transparent;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.c>span {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.modal__inner--header {
+  font-size: 18px;
+  font-weight: 500;
+  background-color: #dedede !important;
+}
+
+.search__container {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search__input {
+  outline: none;
+  border: none;
+  width: 100%;
+  padding: 12px 24px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: transform 250ms ease-in-out;
+  line-height: 18px;
+  color: white;
+  border-radius: 999px;
+  font-size: 16px;
+}
+
+.search__input::placeholder {
+  color: white;
+  /* letter-spacing: 1.5px; */
+  font-weight: 400 !important;
+}
+
+.search {
+  font-size: 24px;
+  color: white;
+  position: absolute;
+  right: 0px;
+  padding: 0 15px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sign-out{
+  padding :8px 16px;
+  background: #ed4337;
+  border : none;
+  color : white;
+  font-weight : 500;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+    </style>
+    <title>Email</title>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="sidebar-menu">
+        <ul class="b">
+          <!-- <li>
+              <span class="modal__open">
+                <span class="las la-pen"></span>
+                <button>Composer</button>
+              <span/>
+          </li> -->
+          <li>
+            <a href="#" class="active a">
+              <span class="las la-clipboard-list"></span>
+              <span>Active User</span></a
+            >
+          </li>
+          <li>
+            <a href="#">
+              <span class="las la-check-square"></span>
+              <span>Sent email per day</span></a
+            >
+            <li>
+              <a href="#">
+                <span class="las la-check-square"></span>
+                <span>Total file was linked</span></a
+              >
+          </li>
+          <li>
+            <a href="#">
+              <span class="las la-check-square"></span>
+              <span>Total size was linked</span></a
+            >
+        </ul>
+      </div>
+    </div>
+    <div class="main-content">
+      <header>
+        <div class="search__container">
+          <input class="search__input" type="text" placeholder="Search">
+          <span class="las la-search search"></span>
+        </div>
+        <button class="sign-out">Sign Out</button>
+        <div class="avatar">
+          <img src="https://lh3.googleusercontent.com/ogw/AOh-ky3bn1bOmQsSM-nxS4fk2VIf23RJZIIVPilkCXlI=s32-c-mo" alt="avatar">
+        </div>
+      </header>
+    </div>
+    <div class="modal hide">
+      <div class="modal__inner">
+        <div class="modal__inner--header">
+          <p>new Message</p>
+        </div>
+        <div class="modal__inner--body">
+          <div class="c">
+            <span>
+              To:
+              <input type="text" class="reci">
+            </span>
+            <span>
+              Subject:
+              <input type="text" class="subject">
+            </span>
+          </div>
+          <textarea name="" id="" cols="30" rows="10" class="contentEmail"></textarea>
+        </div>
+        <div class="modal__inner--footer">
+          <button class="footer__close">Send</button>
+          <button class="footer__close close">Close</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // var btnOpen = document.querySelector('.modal__open');
+var modal = document.querySelector('.modal');
+var footerClose = document.querySelector('.close');
+
+function togleModal (){
+    modal.classList.toggle('hide');
+}
+console.log(btnOpen)
+
+// btnOpen.addEventListener('click', (e) => {
+//     togleModal();
+// });
+modal.addEventListener('click', (e) => {
+    if(e.target == e.currentTarget){
+        togleModal();
+    }
+
+});
+footerClose.addEventListener('click', (e) => {
+    togleModal();
+});
+  </script>
+</html>

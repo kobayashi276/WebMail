@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Website</title>
+</head>
+<body>
+<h1>The page you're looking for doesn't exist!<br>Please head back.</h1>
+<h2>Data:<span th:text="thymeleaf"></span></h2>
+<h3>Error code: <span th:text="${code}" /></h3>
+<h3>Requested URL: <span th:text="${url}" /></h3>
+</body>
+</html>

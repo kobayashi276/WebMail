@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+
+    <link
+            rel="stylesheet"
+            href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <!--    <link rel="stylesheet" href="/taskManager.css" />-->
+    <link rel="stylesheet" href="/userHome.css" />
+    <title>Email</title>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-menu">
+        <div class="logo">
+            <h1><a href="/user" style="text-decoration: none;font-size: 35px;">TDTU MAIL</a></h1>
+        </div>
+        <ul class="b">
+            <li>
+                <span class="modal__open"/>
+                <span class="las la-pen"></span>
+                <button>Compose</button>
+            </li>
+            <li>
+                <a href="/user" th:class="${archive == 'INBOX'}?'active a':'a'">
+                    <span class="las la-clipboard-list"></span>
+                    <span>Inbox</span>
+                </a>
+            </li>
+            <li>
+                <a href="/user/viewStar" th:class="${archive == 'STAR'}?'active a':'a'">
+                    <span class="las la-star"></span>
+                    <span>Starred</span></a
+                >
+            </li>
+            <li>
+                <a href="/user/viewSent" th:class="${archive == 'SENT'}?'active a':'a'">
+                    <span class="las la-check-square"></span>
+                    <span>Sent</span></a
+                >
+            </li>
+            <li>
+                <a href="#" th:class="${archive == 'DRAFT'}?'active a':'a'">
+                    <span class="las la-book"></span>
+                    <span>Drafts</span></a
+                >
+            </li>
+            <li>
+                <a href="/user/viewTrash" th:class="${archive == 'DELETE'}?'active a':'a'">
+                    <span class="las la-trash"></span>
+                    <span>Trash</span></a
+                >
+            </li>
+        </ul>
+        <div class="lable">
+            <span>Labels</span>
+            <span id="label_add" onclick="addLabel()" class="las la-plus"></span>
+        </div>
+        <div th:each="label: ${listLabel}">
+            <div class="lable" style="margin-top: 6px; padding: 0 50px; color:#9e9e9e">
+                <div th:text="${label.name}">Label1</div>
+                <!--                <i class="three-dot fa-solid fa-ellipsis-vertical"></i>-->
+                <div style="display: flex; gap: 10px;">
+                        <i class="three-dot fa-solid fa-trash" th:onclick="deleteLabel([[${label.labelId}]])"></i>
+<!--                    <a th:href="@{/{id}(id = ${label.labelId})}">-->
+                        <i class="three-dot fa-solid fa-pen-to-square" th:onclick="editLabel([[${label.labelId}]],[[${label.name}]])"></i>
+<!--                    </a>-->
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main-content">
+    <header>
+        <div class="search__container">
+            <input class="search__input" type="text" placeholder="Search">
+            <span class="las la-search search"></span>
+        </div>
+        <div class ="info" style="display: flex;gap: 7px; border: 1px solid #5f6368;padding: 6px;border-radius: 9px; align-items: center;">
+            <div style="text-align: center;color: #fff;font-size: 19px;">
+                <img style="width: 67px;margin-top: 4px;height: 34px;" src="/assets/TĐT_logo.png" alt="">
+            </div>
+
+            <div class="dropdown"  style="float:right;">
+                <div class="avatar">
+                    <img th:src="@{/assets/{avatar}(avatar= ${user.AvatarPath}) }" alt="avatar">
+
+                </div>
+                <div class="dropdown-content">
+                    <button onclick="openForm()" style="border: none;width:100%;border-top-left-radius: 12px;border-top-right-radius: 12px;" ><a style="text-decoration: none;color:black;" href="#">See your profile</a></button>
+                    <button onclick="openFormEdit()" style="border: none;width:100%"><a style="text-decoration: none;color:black;" href="#">Edit profile</a></button>
+                    <button onclick="openFormChangePassword()" style="border: none;width:100%"><a style="text-decoration: none;color:black;" href="#">Change password</a></button>
+                    <button onclick="openFormBlock()" style="border: none;width:100%"><a style="text-decoration: none;color:black;" href="#">List block account</a></button>
+                    <button style="border: none;width:100%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;"><a style="text-decoration: none;color:black;" href="/logout">Sign out</a></button>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <div th:switch="${listSize}">
+        <div th:case="'0'">
+            <main >
+                <div class="content-email">
+                    <div class="card">
+                        <div class="card-start">
+                            <span class="las la-square"></span>
+                            <span class="las la-star starActive"></span>
+                            <span>Phuoc Tan</span>
+                        </div>
+                        <div class="card-between">
+                            <span class="ttile">Hello</span>
+                            <span class="main-content-emal">15-08-2022</span>
+                        </div>
+                        <div class="card-end">
+                            <a> <span class="las la-edit"/></a>
+
+                            <span class="las la-trash"></span>
+                            <span class="las la-tag"></span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div th:case="*">
+            <main th:each="email: ${emailBasicList}">
+                <div class="content-email">
+                    <div class="card">
+                        <div th:switch="${email.archive}" class="card-start">
+                            <span class="las la-square"></span>
+                            <span th:case="'STAR'" style="color:yellow;"  class="las la-star starActive">
+                                <a th:href="@{/email/updateArchive(
+                                    id=${email.emailId}, sender=${email.senderEmail},
+                                    title=${email.title}, date=${email.date})}">
+                                </a>
+                            </span>
+                            <span th:case="*" class="las la-star starActive">
+                                <a th:href="@{/email/updateArchive(
+                                    id=${email.emailId}, sender=${email.senderEmail},
+                                    title=${email.title}, date=${email.date})}">
+                                </a>
+                            </span>
+                            <span th:text="${email.senderEmail}"/>
+                        </div>
+                        <div class="card-between">
+                            <span class="ttile" th:text="${email.title}"/>
+                            <span class="main-content-emal" th:text="${email.date}" />
+                        </div>
+                        <div class="card-end">
+                            <a th:href="@{/email/viewDetail(
+                                id=${email.emailId}, sender=${email.senderEmail}, title=${email.title}, date=${email.date}
+                               )}"><span class="las la-edit"/>
+                            </a>
+
+                            <a th:href="@{/email/delete(
+                                id=${email.emailId}, sender=${email.senderEmail}, title=${email.title}, date=${email.date}
+                               )}"> <span class="las la-trash"/>
+                            </a>
+
+                            <span class="las la-tag"></span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<div class="modal hide">
+    <div class="modal__inner">
+        <div class="modal__inner--header">
+            <p>new Message</p>
+        </div>
+        <form method="post" action="/email/send">
+            <div class="modal__inner--body">
+                <div class="c">
+              <span>
+                To:
+                <input name="receiverEmail" type="text" class="reci">
+              </span>
+                    <span>
+                Title:
+                <input name="title" type="text" class="subject">
+              </span>
+                </div>
+                <textarea name="body" id="" cols="30" rows="10" class="contentEmail"></textarea>
+                <input name="archive" value="INBOX" id="emailArchive"/>
+            </div>
+            <div class="modal__inner--footer">
+                <button type="submit" id="btnCloseEmail" class="footer__close close">Close</button>
+                <button type="submit" id="btnSendEmail" class="footer__close">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--  see information of user-->
+<div class="Popup">
+    <div class="PopupDetail" id="popupInfo">
+        <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;;float: right;font-size: 25px;padding: 8px;" onclick="closeForm()"></i>
+        <div class="popup-Container" style="padding-top: 40px;">
+            <h2 style="font-size: 24px;margin-bottom: 8px;">Information of Account</h2>
+
+            <div style="margin-top: 40px;">
+                <img th:src="@{/assets/{avatar}(avatar= ${user.avatar}) }" alt="" style="width: 150px;height: 150px;object-fit: cover;border-radius: 999px;">
+                <div style="margin-top:12px; ">
+                    <p style="font-size: 18px;margin-bottom: 2px;">[[${user.name}]]</p>
+                    <p style="font-size: 16px;">[[${user.email}]]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--  edit information for user-->
+<div class="Popup">
+    <div class="PopupDetail" id="popupEdit">
+        <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;;float: right;font-size: 25px;padding: 8px;" onclick="closeFormEdit()"></i>
+        <form action="/user/editInfo" method="post" enctype="multipart/form-data" class="popup-Container">
+            <h2 style="font-size: 24px;">Edit your information</h2>
+
+            <div style="margin: 80px 0 10px 0;">
+                <label for="name" style="font-size: 16px;">Name:</label>
+                <input type="text" name="name" id="name" th:value="${user.name}" style="margin-left: 8px;height: 30px; width: 350px;">
+            </div>
+
+            <div style="padding: 8px;margin: 10px 0 10px 0;">
+                <label for="avt" style="font-size: 16px;">Choose new Avatar:</label>
+                <input type="file" name="avatar" id="avt" accept="image/png, image/jpeg" >
+            </div>
+
+            <div th:if="${errorMsgOfEditInfo != null}" class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #d04646;height: 25px;border-radius: 8px;" th:text="${errorMsgOfEditInfo}"></p>
+            </div>
+
+            <div th:if="${SuccessMsgOfEditInfo!=null}"  class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #34ac48;height: 25px;border-radius: 8px;" th:text="${SuccessMsgOfEditInfo}"></p>
+            </div>
+
+            <button type="submit" class="btn-Change">Change</button>
+        </form>
+    </div>
+
+    <!--  change password for user-->
+    <div class="Popup">
+        <div class="PopupDetail" id="popupChangePassword">
+            <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;float: right;font-size: 25px;padding: 8px;" onclick="closeFormChangePassword()"></i>
+            <form action="/user/changePassword" method="post" class="popup-Container">
+                <h2 style="font-size: 24px;">Change password</h2>
+
+                <div style="margin: 60px 0 10px 0;">
+                    <label for="oldPass" style="font-size: 16px;float: left;">Old Password:</label>
+                    <input type="password" name="oldPass" id="oldPass" style="margin-left: 8px;height: 25px;width: 335px;">
+                </div>
+
+                <div style="margin: 10px 0 10px 0;">
+                    <label for="newPass" style="font-size: 16px;float: left;">New password:</label>
+                    <input type="password" name="newPass" id="newPass" style="margin-left: 8px;height: 25px;width: 335px;">
+                </div>
+
+                <div style="margin: 10px 0 10px 0;">
+                    <label for="confPass" style="font-size: 16px;float: left;">Confirm password:</label>
+                    <input type="password" name="confPass" id="confPass" style="margin-left: 8px;height: 25px;width: 310px;">
+                </div>
+                <div th:if="${errorMsgOfChangePassword != null}" class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                    <p style="background-color: #d04646;height: 25px;border-radius: 8px;" th:text="${errorMsgOfChangePassword}"></p>
+                </div>
+
+                <div th:if="${SuccessMsgOfChangePassword!=null}"  class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                    <p style="background-color: #34ac48;height: 25px;border-radius: 8px;" th:text="${SuccessMsgOfChangePassword}"></p>
+                </div>
+                <button style="margin-top:8px" type="submit" class="btn-Change">Change</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!--  List of block account-->
+    <div class="Popup">
+        <div class="PopupDetail" id="popupBlock" style="top: 20%;">
+            <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;;float: right;font-size: 25px;padding: 8px;" onclick="closeFormBlock()"></i>
+            <div class="popup-Container" style="padding-top: 40px;">
+                <h2 style="font-size: 24px;margin-bottom: 8px;">List of account blocked</h2>
+
+                <div style="margin-top: 30px;">
+                    <img src="avt1.png" alt="" style="width: 80px;">
+                    <div style="margin-top:12px; ">
+                        <p style="font-size: 16px;margin-bottom: 2px;">Pham Phuoc Tan</p>
+                        <p style="font-size: 14px;">tanphuocdt1@tdtu.vn</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <img src="avt1.png" alt="" style="width: 80px;">
+                    <div style="margin-top:12px; ">
+                        <p style="font-size: 16px;margin-bottom: 2px;">Pham Phuoc Tan</p>
+                        <p style="font-size: 14px;">tanphuocdt1@tdtu.vn</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <img src="avt1.png" alt="" style="width: 80px;">
+                    <div style="margin-top:12px; ">
+                        <p style="font-size: 16px;margin-bottom: 2px;">Pham Phuoc Tan</p>
+                        <p style="font-size: 14px;">tanphuocdt1@tdtu.vn</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <img src="avt1.png" alt="" style="width: 80px;">
+                    <div style="margin-top:12px; ">
+                        <p style="font-size: 16px;margin-bottom: 2px;">Pham Phuoc Tan</p>
+                        <p style="font-size: 14px;">tanphuocdt1@tdtu.vn</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <img src="avt1.png" alt="" style="width: 80px;">
+                    <div style="margin-top:12px; ">
+                        <p style="font-size: 16px;margin-bottom: 2px;">Pham Phuoc Tan</p>
+                        <p style="font-size: 14px;">tanphuocdt1@tdtu.vn</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- add label -->
+<div class="Popup">
+    <div class="PopupDetail" id="popupAddLabel">
+        <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;float: right;font-size: 25px;padding: 8px;" onclick="closeLabel()"></i>
+        <form action="/user/addLabel" method="post" class="popup-Container">
+            <h2 style="font-size: 24px;">Add Label</h2>
+
+            <div style="margin: 60px 0 10px 0;">
+                <label for="newLabelName" style="font-size: 18px;float: left;">Enter new label name:</label>
+                <input type="text" name="nameLabel" id="newLabelName" style="margin-left: 8px;height: 25px;width: 335px;">
+            </div>
+
+            <div th:if="${errorMsgOfAddLabel != null}" class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #d04646;height: 25px;border-radius: 8px;" th:text="${errorMsgOfAddLabel}"></p>
+            </div>
+
+            <div th:if="${SuccessMsgOfAddLabel!=null}"  class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #34ac48;height: 25px;border-radius: 8px;" th:text="${SuccessMsgOfAddLabel}"></p>
+            </div>
+            <button style="margin-top:8px" type="submit" class="btn-Change">Create</button>
+        </form>
+    </div>
+</div>
+<!-- edit popup -->
+<div class="Popup">
+    <div class="PopupDetail" id="popupEditLabel">
+        <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;float: right;font-size: 25px;padding: 8px;" onclick="closeEditLabel()"></i>
+        <form action="/user/editLabel" method="post" class="popup-Container">
+            <h2 style="font-size: 24px;">Edit Label</h2>
+
+            <div style="margin: 60px 0 10px 0;">
+                <label for="newLabelName" style="font-size: 18px;float: left;">Enter new label name:</label>
+                <input type="text" name="nameLabel" id="newEditLabelName" style="margin-left: 8px;height: 25px;width: 335px;">
+                <input type="text" name="labelId" id="labelId" style="display: none">
+            </div>
+
+            <div th:if="${errorMsgOfAddLabel != null}" class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #d04646;height: 25px;border-radius: 8px;" th:text="${errorMsgOfAddLabel}"></p>
+            </div>
+
+            <div th:if="${SuccessMsgOfAddLabel!=null}"  class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #34ac48;height: 25px;border-radius: 8px;" th:text="${SuccessMsgOfAddLabel}"></p>
+            </div>
+            <button style="margin-top:8px" type="submit" class="btn-Change">Save</button>
+        </form>
+    </div>
+</div>
+<!--delete popup-->
+<div class="Popup">
+    <div class="PopupDetail" id="popupDeleteLabel">
+        <i class="fa-sharp fa-solid fa-xmark icon-exit" style="cursor: pointer;float: right;font-size: 25px;padding: 8px;" onclick="closeDeleteLabel()"></i>
+        <form action="/user/deleteLabel" method="post" class="popup-Container">
+            <h2 style="font-size: 24px;">Delete Label</h2>
+
+            <div style="margin: 60px 0 10px 0;">
+                <label for="newLabelName" style="font-size: 18px;float: left;">Are you sure to delete?</label>
+                <input type="text" name="deleteLabelId" id="deleteLabelId" style="display: none">
+            </div>
+
+            <div th:if="${errorMsgOfAddLabel != null}" class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #d04646;height: 25px;border-radius: 8px;" th:text="${errorMsgOfAddLabel}"></p>
+            </div>
+
+            <div th:if="${SuccessMsgOfAddLabel!=null}"  class="form-group" style="border-radius:10px;font-size: 15px;color: #efefef;height: 30px;margin-top: 10px;text-align: center;">
+                <p style="background-color: #34ac48;height: 25px;border-radius: 8px;" th:text="${SuccessMsgOfAddLabel}"></p>
+            </div>
+            <button style="margin-top:8px" type="submit" class="btn-Change">OK</button>
+        </form>
+    </div>
+</div>
+
+</body>
+<script src="/userHome.js"></script>
+</html>
